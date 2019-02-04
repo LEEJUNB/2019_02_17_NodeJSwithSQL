@@ -16,4 +16,4 @@ connection.query(sql,function(err,rows,fields){
         console.log('fields',fields);
     }
 });
-connection.end();
+connection.end(); // 
