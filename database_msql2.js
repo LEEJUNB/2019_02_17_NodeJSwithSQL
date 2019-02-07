@@ -7,13 +7,14 @@ var connection = mysql.createConnection({
 });
 
 connection.connect();
-var sql = "SELECT * FROM topic";
-connection.query(sql,function(err,rows,fields){
-    if(err){
+var sql = 'SELECT * FROM topic';
+connection.query(sql,function(err,rows,fields) {
+    if(err) {
         console.log(err);
     } else {
         console.log(rows);
         console.log(fields);
     }
 });
+
 connection.end();
