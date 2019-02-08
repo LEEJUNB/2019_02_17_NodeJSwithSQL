@@ -1,4 +1,4 @@
-var mysql = require('mysql');
+var mysql = require('mysql'); // node-mysql module
 var connection = mysql.createConnection({
     host : 'localhost',
     user : 'root',
@@ -6,15 +6,3 @@ var connection = mysql.createConnection({
     database : 'o2'
 });
 
-connection.connect();
-var sql = 'SELECT * FROM topic';
-connection.query(sql,function(err,rows,fields) {
-    if(err) {
-        console.log(err);
-    } else {
-        console.log(rows);
-        console.log(fields);
-    }
-});
-
-connection.end(); //
