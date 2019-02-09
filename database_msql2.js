@@ -5,4 +5,3 @@ var connection = mysql.createConnection({
     password : '000000',
     database : 'o2'
 });
-
