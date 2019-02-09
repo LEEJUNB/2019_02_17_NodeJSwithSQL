@@ -4,4 +4,4 @@ var connection = mysql.createConnection({
     user : 'root',
     password : '000000',
     database : 'o2'
-});
+}); //
