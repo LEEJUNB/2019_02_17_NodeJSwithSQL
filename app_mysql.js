@@ -68,15 +68,16 @@ app.post('/topic', function(req,res){
 //new.jade와 동일했던 view.jade파일을 수정하여 제작한 파일(nodejs.txt)을 링크로 띄운다.
 //세부기능 : /topic주소로 들어왔을때 data디렉터리에 있는 파일들을 이름으로 ul리스트생성하기.
 //이 기능을 위해 필요한 것이 fs.readdir
-app.get('/topic', function(req,res){
-    fs.readdir('data', function(err,files){
-        if(err){
-            console.log(err);
-            res.status(500).send('Internal Server Error');
-        }
-        res.render('view', {topics:files}); //view.jade를 의미
-    })
-});
+//12.과정을 위해 주석처리
+// app.get('/topic', function(req,res){
+//     fs.readdir('data', function(err,files){
+//         if(err){
+//             console.log(err);
+//             res.status(500).send('Internal Server Error');
+//         }
+//         res.render('view', {topics:files}); //view.jade를 의미
+//     })
+// });
 
 //10. 기능 : 파일들의 링크를 클릭하면 그 파일의 내용이 웹에 나타남
 //id값에해당되는 파일을 가져와야하기에 fs모듈의 fs.readFile활용
@@ -94,19 +95,54 @@ app.get('/topic', function(req,res){
 
 //11.이제는 /topic주소로 들어갔을 때, 파일들의 링크밑에 그 파일의 내용이 나타나도록 만들것이다.
 //이 코드에는 9.에서 활용한 readdir을 활용하여 /topic/parameter를 입력하면 data디렉터리의 files목록을 가져오도록함
-app.get('/topic/:id',function(req,res){
-    var id = req.params.id;
+//12.과정을 위해 주석처리
+// app.get('/topic/:id',function(req,res){
+//     var id = req.params.id;
+//     fs.readdir('data', function(err,files){
+//         if(err){
+//             console.log(err);
+//             res.status(500).send('Internal Server Error');
+//         }
+//         fs.readFile('data/'+id, 'utf8', function(err,data){
+//             if(err){
+//                 console.log(err);
+//                 res.status(500).send('Internal Server Error');
+//             }
+//             res.render('view', {topics:files, title:id, description:data});
+//         })
+//     })
+// })
+
+//12. 코드개선, 중복제거
+// 9.의'/topic'과 11의'/topic/:id'이 두개의 라우터는 중복되는 코드, 그렇지 않은 코드가 섞여있다.
+// 위 두개의 라우터를 통합시키고 조건문으로 구분짓자
+app.get(['/topic','/topic/:id'], function(req,res){
     fs.readdir('data', function(err,files){
         if(err){
             console.log(err);
             res.status(500).send('Internal Server Error');
         }
-        fs.readFile('data/'+id, 'utf8', function(err,data){
-            if(err){
-                console.log(err);
-                res.status(500).send('Internal Server Error');
-            }
-            res.render('view', {topics:files, title:id, description:data});
-        })
+        var id = req.params.id;
+        if(id){
+            fs.readFile('data/'+id, 'utf8', function(err,data){
+                if(err){
+                    console.log(err);
+                    res.status(500).send('Internal Server Error');
+                }
+                res.render('view', {topics:files, title:id, description:data});
+            })
+        } else {
+            res.render('view', {topics:files, title:'Welcome', description:'Hello, JavaScript'});
+        }
     })
-})
+});
+
+//웹앱만들기 : mysql을 위한 기본설정
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    host : 'localhost',
+    user : 'root',
+    password : '000000',
+    database : 'o2'
+});
+connection.connect();
